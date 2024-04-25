@@ -1,0 +1,16 @@
+	v1	v2	v3	v4	v5	v6	v7	b1	b2	b3	b4	b5	b6	b7	b8	b9
+h1	x	x	x	x	x	x		x								x
+h2	x	x	x	x	x	x		x								x
+h3	x	x	x	x	x	x	x	x								x
+h4	x	x	x	x	x	x	x									x
+h5	x	x	x	x	x	x	x	x								x
+h6	x	x	x	x	x		x		x	x				x	x	
+h7	x		x	x						x				x		
+h8	x	x	x	x						x				x		
+h9	x	x	x	x						x				x		
+h10	x	x	x							x		x	x			
+b10	x	x	x	x	x	x										x
+b4	x	x	x							x		x				
+b6												x		x		
+b8					x	x								x		x
+b2							x	x								
