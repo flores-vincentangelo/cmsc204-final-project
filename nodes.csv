@@ -1,0 +1,9 @@
+nodes,connected_nodes,,
+A,B,C,F
+B,A,D,E
+C,A,D,F
+D,B,C,G
+E,B,G,H
+F,A,C,H
+G,D,E,H
+H,E,F,G
