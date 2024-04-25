@@ -1,0 +1,4 @@
+how to install python packages:
+
+run inside directory:
+    py -m pip install -r packages.txt
