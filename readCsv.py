@@ -24,9 +24,10 @@ with open(os.path.join(dirname, 'edges.csv')) as edges_csv:
 vertical_roads = []
 horizontal_roads = []
 row_values = []
-with open(os.path.join(dirname, 'edges2.csv')) as edges2_csv:
+node_list = []
+with open(os.path.join(dirname, 'nodes-from-map-basic.csv')) as edges2_csv:
     csv_reader2 = csv.reader(edges2_csv, delimiter=',')
-    unordered_pairs_list = []
+    iterator = 1
     for idx, row in enumerate(csv_reader2):
         row_values.append([])
         for idx2, column_val in enumerate(row):
@@ -38,17 +39,40 @@ with open(os.path.join(dirname, 'edges2.csv')) as edges2_csv:
                 row_values[idx].append(column_val)
                 continue
             if column_val == 'x':
-                row_values[idx].append(f'{horizontal_roads[idx]}-{vertical_roads[idx2]}')
-                unordered_pairs_list.append((horizontal_roads[idx], vertical_roads[idx2]))
+                h = horizontal_roads[idx]
+                v = vertical_roads[idx2]
+                id =  iterator
+                node_object = {
+                    "h": h, "v": v, "id": id
+                }
+
+                if h == 'B1' and (v == "V2" or v == "V1"):
+                    continue
+                elif v == "B1" and (h == "H1" or h == "H4"):
+                    continue
+                elif (h == "H1" and v == "V2") or (h == "H4" and v == "V1"):
+                    node_object["b"] = "B1"
+                    pass
+                row_values[idx].append(f'{node_object['h']}-{node_object['v']}')
+                node_list.append(node_object)
+                iterator += 1
             else:
                 row_values[idx].append('')
     print(vertical_roads)
 
-with open(os.path.join(dirname, 'nodes2.csv'), 'w') as write_csv_file:
+
+
+with open(os.path.join(dirname, 'nodes-from-map-advance.csv'), 'w') as write_csv_file:
     writer = csv.writer(write_csv_file)
     writer.writerow(vertical_roads)
     writer.writerows(row_values)
-    
+
+f = open(os.path.join(dirname, 'nodes2.json'), 'w')
+f.write('{')
+for idx, element in enumerate(node_list):
+    f.write(f'"{idx + 1}": {json.dumps(element)},\n')
+f.write('}')
+f.close()
 
 # print(edge_tuple_arr)
 # print(json.dumps(node_dict,sort_keys=True, indent=4))
