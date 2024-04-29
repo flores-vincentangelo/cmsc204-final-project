@@ -1,16 +1,14 @@
-	v1	v2	v3	v4	v5	v6	v7	b1	b2	b3	b4	b5	b6	b7	b8	b9
-h1	x	x	x	x	x	x		x								x
-h2	x	x	x	x	x	x		x								x
-h3	x	x	x	x	x	x	x	x								x
-h4	x	x	x	x	x	x	x									x
-h5	x	x	x	x	x	x	x	x								x
-h6	x	x	x	x	x		x		x	x				x	x	
-h7	x		x	x						x				x		
-h8	x	x	x	x						x				x		
-h9	x	x	x	x						x				x		
-h10	x	x	x							x		x	x			
-b10	x	x	x	x	x	x										x
-b4	x	x	x							x		x				
-b6												x		x		
-b8					x	x								x		x
-b2							x	x								
+﻿,B1,V1,V2,V3,V4,V5,V6,V7,V8
+B1,,x,x,,,,,,
+H1,x,,x,x,x,x,x,x,x
+H2,x,,x,x,x,x,x,x,x
+H3,x,,x,x,x,x,x,x,x
+H4,x,x,x,x,x,x,x,x,x
+H5,,x,x,x,x,x,x,x,x
+H6,x,x,x,x,x,x,x,x,x
+H7,x,x,x,x,x,x,x,x,x
+H8,,x,x,x,x,x,x,,
+H9,,x,x,x,x,x,x,,
+H10,,x,x,x,x,x,x,,
+H11,,x,x,x,x,x,x,,
+H12,,x,x,x,x,x,,,
