@@ -22,21 +22,20 @@ with open(os.path.join(dirname, 'edges.csv')) as edges_csv:
             edge_tuple_arr.append((row[0], row[1], row[2]))
 
 with open(os.path.join(dirname, 'edges2.csv')) as edges2_csv:
-    csv_reader2 = csv.reader(edges2_csv, delimiter='\t')
+    csv_reader2 = csv.reader(edges2_csv, delimiter=',')
     vertical_roads = []
     horizontal_roads = []
-    ordered_pairs = {}
     unordered_pairs_list = []
     for idx, row in enumerate(csv_reader2):
-        horizontal_road_label = row[0]
-        ordered_pairs.setdefault(horizontal_road_label,[])
-        for idx2, column in enumerate(row):
+        for idx2, column_val in enumerate(row):
             if idx == 0:
-                vertical_roads.append(column.strip())
-            if idx != 0 and idx2 > 0:
-                if column == 'x':
-                    ordered_pairs[horizontal_road_label].append(vertical_roads[idx2])
-                    unordered_pairs_list.append((horizontal_road_label, vertical_roads[idx2]))
+                vertical_roads.append(column_val)
+            
+            if idx2 == 0:
+                horizontal_roads.append(column_val)
+            elif idx2 > 0:
+                if column_val == 'x':
+                    unordered_pairs_list.append((horizontal_roads[idx], vertical_roads[idx2]))
     print(vertical_roads)
 
 # print(edge_tuple_arr)
