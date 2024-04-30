@@ -1,6 +1,7 @@
 import csv
 import os
 import json
+import random
 
 dirname = os.path.dirname(__file__)
 
@@ -53,7 +54,7 @@ with open(os.path.join(dirname, 'nodes-from-map-advance.csv'), 'w') as write_csv
     writer.writerow(vertical_roads)
     writer.writerows(row_values)
 # write the list of nodes
-f = open(os.path.join(dirname, 'nodes2.json'), 'w')
+f = open(os.path.join(dirname, 'nodes_dict.json'), 'w')
 f.write('{')
 for idx, (node_key, v) in enumerate(node_dict.items()):
     f.write(f'"{node_key}": {json.dumps(v)},\n')
@@ -61,15 +62,24 @@ f.write('}')
 f.close()
 print(f"node list count: {len(node_dict.keys())}/86") # must have 86 nodes
 
+f = open(os.path.join(dirname, 'nodes.csv'), 'w')
+f.write('nodes\n')
+for key in node_dict.keys():
+    f.write(f"{key}\n")
+f.close()
 
 horizontal_time_weights = []
 vertical_time_weights = []
+b_time_weight = random.randint(1,10)
 for i in horizontal_roads:
-    
+    horizontal_time_weights.append(random.randint(1,10))
+for i in vertical_roads:
+    vertical_time_weights.append(random.randint(1,10))
 
 
 # make edges
 edge_dict = {}
+edge_list = []
 for idx, h in enumerate(horizontal_roads):
     for idx2, v in enumerate(vertical_roads):
 
@@ -97,34 +107,51 @@ for idx, h in enumerate(horizontal_roads):
         node_right = node_dict[node_right_key] if node_right_key in node_dict else None
 
 
+
         edge_dict.setdefault("H2B1-H1V2B1",{})
         edge_dict.setdefault("H2B1-H2V2",{})
         edge_dict.setdefault("H3B1-H4V1B1",{})
         edge_dict.setdefault("H3B1-H3V2",{})
         edge_dict.setdefault("H4V1B1-H6B1",{})
+
         if node is None:
             continue
         if node_top:
             if edge_dict.get(f"{node_key}-{node_top_key}") is None and edge_dict.get(f"{node_top_key}-{node_key}") is None:
                 edge_dict[f"{node_key}-{node_top_key}"] = {}
+                edge_list.append([node_key, node_top_key, vertical_time_weights[idx2]])
         if node_bot:
             if edge_dict.get(f"{node_key}-{node_bot_key}") is None and edge_dict.get(f"{node_bot_key}-{node_key}") is None:
                 edge_dict[f"{node_key}-{node_bot_key}"] = {}
+                edge_list.append([node_key, node_bot_key, vertical_time_weights[idx2]])
         if node_left:
             if edge_dict.get(f"{node_key}-{node_left_key}") is None and edge_dict.get(f"{node_left_key}-{node_key}") is None:
                 edge_dict[f"{node_key}-{node_left_key}"] = {}
+                edge_list.append([node_key, node_left_key, horizontal_time_weights[idx]])
         if node_right:
             if edge_dict.get(f"{node_key}-{node_right_key}") is None and edge_dict.get(f"{node_right_key}-{node_key}") is None:
                 edge_dict[f"{node_key}-{node_right_key}"] = {}
+                edge_list.append([node_key, node_right_key, horizontal_time_weights[idx]])
         pass
-
+edge_list.append(["H2B1", "H1V2B1", b_time_weight])
+edge_list.append(["H2B1", "H2V2", b_time_weight])
+edge_list.append(["H3B1", "H4V1B1", b_time_weight])
+edge_list.append(["H3B1", "H3V2", b_time_weight])
+edge_list.append(["H4V1B1", "H6B1", b_time_weight])
 # write the list of edges
-f = open(os.path.join(dirname, 'edges2.json'), 'w')
+f = open(os.path.join(dirname, 'edges_dict.json'), 'w')
 f.write('{')
 for idx, (node_key, v) in enumerate(edge_dict.items()):
     f.write(f'"{node_key}": {json.dumps(v)},\n')
 f.write('}')
 f.close()
 print(f"edge list count: {len(edge_dict.keys())}/153")
+
+print(f"edge list count: {len(edge_list)}/153")
+f = open(os.path.join(dirname, 'edges.csv'), 'w')
+f.write('start_node,end_node,weight\n')
+for element in edge_list:
+    f.write(f"{element[0]},{element[1]},{element[2]}\n")
+f.close()
 
 print("done")

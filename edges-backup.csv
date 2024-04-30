@@ -1,0 +1,13 @@
+start_node,end_node,weight
+A,B,2
+A,C,5
+B,D,3
+B,E,7
+C,F,4
+D,G,2
+E,H,1
+F,H,6
+G,H,3
+A,F,1
+C,D,2
+E,G,5
