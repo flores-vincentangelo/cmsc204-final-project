@@ -1,6 +1,7 @@
 import heapq
 import networkx as nx
 import matplotlib.pyplot as plt
+import readCsv
 
 class Graph:
     def __init__(self):
@@ -48,13 +49,15 @@ def visualize_graph(graph):
 
 def main():
     graph = Graph()
-    nodes = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+    # nodes = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+    nodes = readCsv.get_nodes()
     for node in nodes:
         graph.add_node(node)
 
-    edges = [('A', 'B', 2), ('A', 'C', 5), ('B', 'D', 3), ('B', 'E', 7),
-             ('C', 'F', 4), ('D', 'G', 2), ('E', 'H', 1), ('F', 'H', 6),
-             ('G', 'H', 3), ('A', 'F', 1), ('C', 'D', 2), ('E', 'G', 5)]
+    # edges = [('A', 'B', 2), ('A', 'C', 5), ('B', 'D', 3), ('B', 'E', 7),
+    #          ('C', 'F', 4), ('D', 'G', 2), ('E', 'H', 1), ('F', 'H', 6),
+    #          ('G', 'H', 3), ('A', 'F', 1), ('C', 'D', 2), ('E', 'G', 5)]
+    edges = readCsv.get_edges()
     for edge in edges:
         graph.add_edge(*edge)
 
