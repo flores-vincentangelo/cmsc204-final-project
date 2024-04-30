@@ -30,33 +30,32 @@ with open(os.path.join(dirname, 'nodes-from-map-basic.csv')) as edges2_csv:
     iterator = 1
     for idx, row in enumerate(csv_reader2):
         row_values.append([])
+
+        if idx == 0:
+            vertical_roads = row
+            continue
+
         for idx2, column_val in enumerate(row):
-            if idx == 0:
-                vertical_roads.append(column_val)
-            
+                        
             if idx2 == 0:
                 horizontal_roads.append(column_val)
                 row_values[idx].append(column_val)
                 continue
             if column_val == 'x':
-                h = horizontal_roads[idx]
-                val = vertical_roads[idx2]
+                h = horizontal_roads[idx - 1]
+                v = vertical_roads[idx2]
                 id =  iterator
                 node_object = {
-                    "h": h, "v": val, "id": id
+                    "h": h, "v": v, "id": id
                 }
 
-                if h == 'B1' and (val == "V2" or val == "V1"):
+                if v == "B1" and (h == "H1" or h == "H4"):
                     continue
-                elif val == "B1" and (h == "H1" or h == "H4"):
-                    continue
-                elif (h == "H1" and val == "V2") or (h == "H4" and val == "V1"):
+                elif (h == "H1" and v == "V2") or (h == "H4" and v == "V1"):
                     node_object["b"] = "B1"
-                    pass
                 
-                key = f"{h}{val}"
+                key = f"{h}{v}"
                 key += node_object["b"] if "b" in node_object else ''
-                  
 
                 row_values[idx].append(f'{node_object['h']}-{node_object['v']}')
                 node_dict[key] = node_object
@@ -73,8 +72,8 @@ with open(os.path.join(dirname, 'nodes-from-map-advance.csv'), 'w') as write_csv
 # write the list of nodes
 f = open(os.path.join(dirname, 'nodes2.json'), 'w')
 f.write('{')
-for idx, (node_key, val) in enumerate(node_dict.items()):
-    f.write(f'"{node_key}": {json.dumps(val)},\n')
+for idx, (node_key, v) in enumerate(node_dict.items()):
+    f.write(f'"{node_key}": {json.dumps(v)},\n')
 f.write('}')
 f.close()
 print(f"node list count: {len(node_dict.keys())}/86") # must have 86 nodes
@@ -83,18 +82,18 @@ print(f"node list count: {len(node_dict.keys())}/86") # must have 86 nodes
 # make edges
 edge_list = []
 edge_dict = {}
-for idx, (node_key, val) in enumerate(node_dict.items()):
-    h_name = val["h"][0]
-    h_number = int(val["h"].split(h_name)[1])
-    v_name = val["v"][0]
-    v_number = int(val["v"].split(v_name)[1])
-    id = val["id"]
-    b = int(val["b"][1]) if "b" in val else None
+for idx, (node_key, v) in enumerate(node_dict.items()):
+    h_name = v["h"][0]
+    h_number = int(v["h"].split(h_name)[1])
+    v_name = v["v"][0]
+    v_number = int(v["v"].split(v_name)[1])
+    id = v["id"]
+    b = int(v["b"][1]) if "b" in v else None
 
-    node_top_key = f"{h_name}{h_number - 1}{val["v"]}"
-    node_bot_key = f"{h_name}{h_number + 1}{val["v"]}"
-    node_left_key = f"{val["h"]}{v_name}{v_number - 1}"
-    node_right_key = f"{val["h"]}{v_name}{v_number + 1}"
+    node_top_key = f"{h_name}{h_number - 1}{v["v"]}"
+    node_bot_key = f"{h_name}{h_number + 1}{v["v"]}"
+    node_left_key = f"{v["h"]}{v_name}{v_number - 1}"
+    node_right_key = f"{v["h"]}{v_name}{v_number + 1}"
 
     node_top = node_dict[node_top_key] if node_top_key in node_dict else None
     node_bot = node_dict[node_bot_key] if node_bot_key in node_dict else None
@@ -117,8 +116,8 @@ for idx, (node_key, val) in enumerate(node_dict.items()):
 # write the list of edges
 f = open(os.path.join(dirname, 'edges2.json'), 'w')
 f.write('{')
-for idx, (node_key, val) in enumerate(edge_dict.items()):
-    f.write(f'"{node_key}": {json.dumps(val)},\n')
+for idx, (node_key, v) in enumerate(edge_dict.items()):
+    f.write(f'"{node_key}": {json.dumps(v)},\n')
 f.write('}')
 f.close()
 print(f"edge list count: {len(edge_dict.keys())}/153")
