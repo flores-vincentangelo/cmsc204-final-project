@@ -40,9 +40,9 @@ def generate_pos(h, v):
     }
 }
     if v == "B1":
-        return (pos_mapping["h"][h], pos_mapping["v"][h])
+        return (pos_mapping["v"][h], pos_mapping["h"][h])
     else:
-        return (pos_mapping["h"][h], pos_mapping["v"][v])
+        return (pos_mapping["v"][v], pos_mapping["h"][h])
                     
 
 vertical_roads = []

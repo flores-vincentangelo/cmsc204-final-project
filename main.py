@@ -30,15 +30,15 @@ class Graph:
                     heapq.heappush(queue, (distance, neighbor))
         return distances
 
-def visualize_graph(graph):
+def visualize_graph(graph, positions):
     G = nx.Graph()
     for node in graph.nodes:
         G.add_node(node)
     for from_node, neighbors in graph.edges.items():
         for to_node, weight in neighbors:
             G.add_edge(from_node, to_node, weight=weight)
-    pos = nx.spring_layout(G, scale=2)
-    # pos = {1: (0, 0), 2: (-1, 0.3), 3: (2, 0.17), 4: (4, 0.255), 5: (5, 0.03)}
+    # pos = nx.spring_layout(G, scale=2)
+    pos = positions
     nx.draw(G, pos, with_labels=True, node_size=600, node_color='skyblue', font_size=12, font_weight='bold', arrows=True)
     edge_labels = nx.get_edge_attributes(G, 'weight')
     nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels)
@@ -51,7 +51,8 @@ def visualize_graph(graph):
 def main():
     graph = Graph()
     # nodes = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
-    nodes = readCsv.get_nodes()
+    nodes = readCsv.get_nodes()["node_list"]
+    positions = readCsv.get_nodes()["positions"]
     for node in nodes:
         graph.add_node(node)
 
@@ -62,7 +63,7 @@ def main():
     for edge in edges:
         graph.add_edge(*edge)
 
-    visualize_graph(graph)
+    visualize_graph(graph, positions)
 
     start = input("Enter the Starting Node: ").strip().upper()
     end = input("Enter the End Node: ").strip().upper()
