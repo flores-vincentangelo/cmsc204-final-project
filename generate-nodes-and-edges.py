@@ -5,10 +5,51 @@ import random
 
 dirname = os.path.dirname(__file__)
 
+
+
+def generate_pos(h, v):
+    pos_mapping = {
+    "h": {
+        "H12": 0,
+        "H11": 1,
+        "H10": 2,
+        "H9": 3,
+        "H8": 4,
+        "H7": 5,
+        "H6": 6,
+        "H5": 7,
+        "H4": 8,
+        "H3": 9,
+        "H2": 10,
+        "H1": 11,
+    },
+    "v": {
+        "H7": 0,
+        "H6": 1,
+        "V1": 2,
+        "H3": 3,
+        "H2": 4,
+        "V2": 5,
+        "V3": 6,
+        "V4": 7,
+        "V5": 8,
+        "V6": 9,
+        "V7": 10,
+        "V8": 11,
+
+    }
+}
+    if v == "B1":
+        return (pos_mapping["h"][h], pos_mapping["v"][h])
+    else:
+        return (pos_mapping["h"][h], pos_mapping["v"][v])
+                    
+
 vertical_roads = []
 horizontal_roads = []
 row_values = []
 node_dict = {}
+pos_dict = {}
 with open(os.path.join(dirname, 'nodes-from-map-basic.csv')) as edges2_csv:
     csv_reader2 = csv.reader(edges2_csv, delimiter=',')
     iterator = 1
@@ -40,9 +81,11 @@ with open(os.path.join(dirname, 'nodes-from-map-basic.csv')) as edges2_csv:
                 
                 key = f"{h}{v}"
                 key += node_object["b"] if "b" in node_object else ''
-
+                
                 row_values[idx].append(f'{node_object['h']}-{node_object['v']}')
                 node_dict[key] = node_object
+                pos = generate_pos(h, v)
+                pos_dict[key] = pos
                 iterator += 1
             else:
                 row_values[idx].append('')
@@ -53,6 +96,7 @@ with open(os.path.join(dirname, 'nodes-from-map-advance.csv'), 'w') as write_csv
     writer = csv.writer(write_csv_file)
     writer.writerow(vertical_roads)
     writer.writerows(row_values)
+
 # write the list of nodes
 f = open(os.path.join(dirname, 'nodes_dict.json'), 'w')
 f.write('{')
@@ -62,10 +106,11 @@ f.write('}')
 f.close()
 print(f"node list count: {len(node_dict.keys())}/86") # must have 86 nodes
 
+# make final nodes.csv file
 f = open(os.path.join(dirname, 'nodes.csv'), 'w')
-f.write('nodes\n')
+f.write('nodes,x,y\n')
 for key in node_dict.keys():
-    f.write(f"{key}\n")
+    f.write(f"{key},{pos_dict[key][0]},{pos_dict[key][1]}\n")
 f.close()
 
 horizontal_time_weights = []

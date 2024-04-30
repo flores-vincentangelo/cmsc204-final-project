@@ -38,6 +38,7 @@ def visualize_graph(graph):
         for to_node, weight in neighbors:
             G.add_edge(from_node, to_node, weight=weight)
     pos = nx.spring_layout(G, scale=2)
+    # pos = {1: (0, 0), 2: (-1, 0.3), 3: (2, 0.17), 4: (4, 0.255), 5: (5, 0.03)}
     nx.draw(G, pos, with_labels=True, node_size=600, node_color='skyblue', font_size=12, font_weight='bold', arrows=True)
     edge_labels = nx.get_edge_attributes(G, 'weight')
     nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels)
