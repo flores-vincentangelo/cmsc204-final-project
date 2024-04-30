@@ -62,13 +62,13 @@ with open(os.path.join(dirname, 'nodes-from-map-basic.csv')) as edges2_csv:
                 iterator += 1
             else:
                 row_values[idx].append('')
+vertical_roads.pop(0)
 
 # makes a csv file simillar to the node-from-map-basic.csv
 with open(os.path.join(dirname, 'nodes-from-map-advance.csv'), 'w') as write_csv_file:
     writer = csv.writer(write_csv_file)
     writer.writerow(vertical_roads)
     writer.writerows(row_values)
-
 # write the list of nodes
 f = open(os.path.join(dirname, 'nodes2.json'), 'w')
 f.write('{')
@@ -80,38 +80,85 @@ print(f"node list count: {len(node_dict.keys())}/86") # must have 86 nodes
 
 
 # make edges
-edge_list = []
 edge_dict = {}
-for idx, (node_key, v) in enumerate(node_dict.items()):
-    h_name = v["h"][0]
-    h_number = int(v["h"].split(h_name)[1])
-    v_name = v["v"][0]
-    v_number = int(v["v"].split(v_name)[1])
-    id = v["id"]
-    b = int(v["b"][1]) if "b" in v else None
+# for idx, (node_key, v) in enumerate(node_dict.items()):
+#     h_name = v["h"][0]
+#     h_number = int(v["h"].split(h_name)[1])
+#     v_name = v["v"][0]
+#     v_number = int(v["v"].split(v_name)[1])
+#     id = v["id"]
+#     b = int(v["b"][1]) if "b" in v else None
 
-    node_top_key = f"{h_name}{h_number - 1}{v["v"]}"
-    node_bot_key = f"{h_name}{h_number + 1}{v["v"]}"
-    node_left_key = f"{v["h"]}{v_name}{v_number - 1}"
-    node_right_key = f"{v["h"]}{v_name}{v_number + 1}"
+#     node_top_key = f"{h_name}{h_number - 1}{v["v"]}"
+#     node_bot_key = f"{h_name}{h_number + 1}{v["v"]}"
+#     node_left_key = f"{v["h"]}{v_name}{v_number - 1}"
+#     node_right_key = f"{v["h"]}{v_name}{v_number + 1}"
 
-    node_top = node_dict[node_top_key] if node_top_key in node_dict else None
-    node_bot = node_dict[node_bot_key] if node_bot_key in node_dict else None
-    node_left = node_dict[node_left_key] if node_left_key in node_dict else None
-    node_right = node_dict[node_right_key] if node_right_key in node_dict else None
+#     node_top = node_dict[node_top_key] if node_top_key in node_dict else None
+#     node_bot = node_dict[node_bot_key] if node_bot_key in node_dict else None
+#     node_left = node_dict[node_left_key] if node_left_key in node_dict else None
+#     node_right = node_dict[node_right_key] if node_right_key in node_dict else None
 
-    if node_top:
-        if edge_dict.get(f"{node_key}-{node_top_key}") is None and edge_dict.get(f"{node_top_key}-{node_key}") is None:
-            edge_dict[f"{node_key}-{node_top_key}"] = {}
-    if node_bot:
-        if edge_dict.get(f"{node_key}-{node_bot_key}") is None and edge_dict.get(f"{node_bot_key}-{node_key}") is None:
-            edge_dict[f"{node_key}-{node_bot_key}"] = {}
-    if node_left:
-        if edge_dict.get(f"{node_key}-{node_left_key}") is None and edge_dict.get(f"{node_left_key}-{node_key}") is None:
-            edge_dict[f"{node_key}-{node_left_key}"] = {}
-    if node_right:
-        if edge_dict.get(f"{node_key}-{node_right_key}") is None and edge_dict.get(f"{node_right_key}-{node_key}") is None:
-            edge_dict[f"{node_key}-{node_right_key}"] = {}
+#     if node_top:
+#         if edge_dict.get(f"{node_key}-{node_top_key}") is None and edge_dict.get(f"{node_top_key}-{node_key}") is None:
+#             edge_dict[f"{node_key}-{node_top_key}"] = {}
+#     if node_bot:
+#         if edge_dict.get(f"{node_key}-{node_bot_key}") is None and edge_dict.get(f"{node_bot_key}-{node_key}") is None:
+#             edge_dict[f"{node_key}-{node_bot_key}"] = {}
+#     if node_left:
+#         if edge_dict.get(f"{node_key}-{node_left_key}") is None and edge_dict.get(f"{node_left_key}-{node_key}") is None:
+#             edge_dict[f"{node_key}-{node_left_key}"] = {}
+#     if node_right:
+#         if edge_dict.get(f"{node_key}-{node_right_key}") is None and edge_dict.get(f"{node_right_key}-{node_key}") is None:
+#             edge_dict[f"{node_key}-{node_right_key}"] = {}
+
+for idx, h in enumerate(horizontal_roads):
+    for idx2, v in enumerate(vertical_roads):
+
+        h_top = horizontal_roads[idx - 1] if idx - 1 >= 0 else None
+        h_bot = horizontal_roads[idx + 1] if idx + 1 < len(horizontal_roads) else None
+        v_left = vertical_roads[idx2 - 1] if idx2 - 1 >= 0 else None
+        v_right = vertical_roads[idx2 + 1] if idx2 + 1 < len(vertical_roads) else None
+        
+        def check_special_case(test_string):
+            if test_string == "H1V2" or test_string == "H4V1":
+                return test_string + "B1"
+            else:
+                return test_string
+
+        node_key = check_special_case(h+v)
+        node_top_key = check_special_case(f"{h_top}{v}")
+        node_bot_key = check_special_case(f"{h_bot}{v}")
+        node_left_key = check_special_case(f"{h}{v_left}")
+        node_right_key = check_special_case(f"{h}{v_right}")
+        
+        node = node_dict[node_key] if node_key in node_dict else None
+        node_top = node_dict[node_top_key] if node_top_key in node_dict else None
+        node_bot = node_dict[node_bot_key] if node_bot_key in node_dict else None
+        node_left = node_dict[node_left_key] if node_left_key in node_dict else None
+        node_right = node_dict[node_right_key] if node_right_key in node_dict else None
+
+
+        edge_dict.setdefault("H2B1-H1V2B1",{})
+        edge_dict.setdefault("H2B1-H2V2",{})
+        edge_dict.setdefault("H3B1-H4V1B1",{})
+        edge_dict.setdefault("H3B1-H3V2",{})
+        edge_dict.setdefault("H4V1B1-H6B1",{})
+        if node is None:
+            continue
+        if node_top:
+            if edge_dict.get(f"{node_key}-{node_top_key}") is None and edge_dict.get(f"{node_top_key}-{node_key}") is None:
+                edge_dict[f"{node_key}-{node_top_key}"] = {}
+        if node_bot:
+            if edge_dict.get(f"{node_key}-{node_bot_key}") is None and edge_dict.get(f"{node_bot_key}-{node_key}") is None:
+                edge_dict[f"{node_key}-{node_bot_key}"] = {}
+        if node_left:
+            if edge_dict.get(f"{node_key}-{node_left_key}") is None and edge_dict.get(f"{node_left_key}-{node_key}") is None:
+                edge_dict[f"{node_key}-{node_left_key}"] = {}
+        if node_right:
+            if edge_dict.get(f"{node_key}-{node_right_key}") is None and edge_dict.get(f"{node_right_key}-{node_key}") is None:
+                edge_dict[f"{node_key}-{node_right_key}"] = {}
+        pass
 
 # write the list of edges
 f = open(os.path.join(dirname, 'edges2.json'), 'w')
