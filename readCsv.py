@@ -25,5 +25,5 @@ def get_edges():
         csv_reader = csv.reader(edges_csv, delimiter=',')
         for idx, row in enumerate(csv_reader):
             if idx != 0:
-                edge_tuple_arr.append((row[0], row[1], int(row[2])))
+                edge_tuple_arr.append((row[0], row[1], float(row[2])))
     return edge_tuple_arr

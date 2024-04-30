@@ -115,11 +115,11 @@ f.close()
 
 horizontal_time_weights = []
 vertical_time_weights = []
-b_time_weight = random.randint(1,10)
+b_time_weight = random.randint(30,70)/100
 for i in horizontal_roads:
-    horizontal_time_weights.append(random.randint(1,10))
+    horizontal_time_weights.append(random.randint(40,80)/100)
 for i in vertical_roads:
-    vertical_time_weights.append(random.randint(1,10))
+    vertical_time_weights.append(random.randint(50,90)/100)
 
 
 # make edges
