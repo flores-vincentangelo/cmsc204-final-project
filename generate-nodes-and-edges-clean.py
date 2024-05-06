@@ -89,7 +89,6 @@ for key in node_dict.keys():
     f.write(f"{key},{pos_dict[key][0]},{pos_dict[key][1]}\n")
 f.close()
 
-
 # weights
 horizontal_time_weights = []
 vertical_time_weights = []
@@ -98,7 +97,6 @@ for i in horizontal_roads:
     horizontal_time_weights.append(random.randint(40,80)/100)
 for i in vertical_roads:
     vertical_time_weights.append(random.randint(50,90)/100)
-
 
 # make edges
 edge_dict = {}
