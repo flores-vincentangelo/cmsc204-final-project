@@ -44,14 +44,12 @@ def generate_pos(h, v):
                     
 vertical_roads = []
 horizontal_roads = []
-row_values = []
 node_dict = {}
 pos_dict = {}
 with open(os.path.join(dirname, 'tmp/nodes-from-map-basic.csv')) as edges2_csv:
     csv_reader2 = csv.reader(edges2_csv, delimiter=',')
     iterator = 1
     for idx, row in enumerate(csv_reader2):
-        row_values.append([])
 
         if idx == 0:
             vertical_roads = row
@@ -61,7 +59,6 @@ with open(os.path.join(dirname, 'tmp/nodes-from-map-basic.csv')) as edges2_csv:
                         
             if idx2 == 0:
                 horizontal_roads.append(column_val)
-                row_values[idx].append(column_val)
                 continue
             if column_val == 'x':
                 h = horizontal_roads[idx - 1]
@@ -79,13 +76,10 @@ with open(os.path.join(dirname, 'tmp/nodes-from-map-basic.csv')) as edges2_csv:
                 key = f"{h}{v}"
                 key += node_object["b"] if "b" in node_object else ''
                 
-                row_values[idx].append(f'{node_object['h']}-{node_object['v']}')
                 node_dict[key] = node_object
                 pos = generate_pos(h, v)
                 pos_dict[key] = pos
                 iterator += 1
-            else:
-                row_values[idx].append('')
 vertical_roads.pop(0)
 
 # make final nodes.csv file
@@ -168,7 +162,6 @@ edge_list.append(["H3B1", "H4V1B1", b_time_weight])
 edge_list.append(["H3B1", "H3V2", b_time_weight])
 edge_list.append(["H4V1B1", "H6B1", b_time_weight])
 
-print(f"edge list count: {len(edge_list)}/153")
 f = open(os.path.join(dirname, 'edges.csv'), 'w')
 f.write('start_node,end_node,weight\n')
 for element in edge_list:
